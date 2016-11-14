@@ -87,7 +87,7 @@ public class LotteryService implements Serializable, ILotteryService {
 	public void purchase(String name) {
 		Integer availableBall = remainBallsForPurchase().findAny().orElse(null);
 		if (availableBall == null) {
-			throw new LotteryException("No more ball for purchasing. Retry.");
+			throw new LotteryException("No more tickets for purchasing. Retry.");
 		} else {
 			purchase(name, availableBall);
 		}
@@ -113,14 +113,20 @@ public class LotteryService implements Serializable, ILotteryService {
 		}
 
 		if (purchases.containsKey(ballNo)) {
-			throw new LotteryException(String.format("This ball %d has been purchased. Retry.", ballNo));
+			throw new LotteryException(String.format("This ticket %d has been purchased. Retry.", ballNo));
 		}
 		Ticket ticket = new Ticket(name, ballNo);
 		this.purchases.put(ballNo, ticket);
 	}
-
+	
 	@Override
 	public void reset() {
+		reset(200);
+	}
+
+	@Override
+	public void reset(int amout) {
+		this.availableAmount = BigDecimal.valueOf(amout);
 		this.purchases.clear();
 		this.prizes.clear();
 		mixing();

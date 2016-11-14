@@ -49,11 +49,11 @@ public class App {
 
 	private static void helpOnAvailableCommands(ILotteryService lotteryService) {
 		log("Here are your commands. Press [enter] key after typing your desired command alog with his Spaced arguments");
-		log("Command p or purchase allows you to purchase balls e.g purchase bret 10. Your ball no is in range 1..50. Nb Ball number is optional.");
-		log("Command w or winners allows you to display winners. e.g winners");
-		log("Command d or draw allows you to pick randomly 3 winners. e.g draw");
-		log("Command r or reset allows you to reset the session. e.g reset");
-		log("Command q or quit allows you to end the session. e.g quit");
+		log("Command p|purchase [amountOptional][ticketNoOptional] allows you to purchase tickets e.g purchase bret 10. Your ball no is in range 1..50. Nb Ball number is optional.");
+		log("Command w|winners allows you to display winners. e.g winners");
+		log("Command d|draw allows you to pick randomly 3 winners. e.g draw");
+		log("Command r|reset [amountOptional]allows you to reset the session. e.g reset 250");
+		log("Command q|quit allows you to end the session. e.g quit");
 		log("List of available balls for purchasing : \n %s", availableBalls(lotteryService));
 	}
 
@@ -74,7 +74,7 @@ public class App {
 		case "purchase":
 			if (argsFiltered.size() == 2) {
 				service.purchase(argsFiltered.get(1));
-			} else if (argsFiltered.size() == 3) {
+			} else if (argsFiltered.size() >= 3) {
 				service.purchase(argsFiltered.get(1), toInt(argsFiltered.get(2)));
 			}
 			break;
@@ -90,7 +90,11 @@ public class App {
 			break;
 		case "r":
 		case "reset":
-			service.reset();
+			if (argsFiltered.size() == 1) {
+				service.reset();
+			} else if (argsFiltered.size() >= 2) {
+				service.reset(toInt(argsFiltered.get(1)));
+			}			
 			break;
 		case "t":
 		case "test":
